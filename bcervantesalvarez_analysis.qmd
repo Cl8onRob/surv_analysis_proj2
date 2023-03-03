@@ -1,0 +1,28 @@
+---
+title: "MLB Pitch Tempo"
+author: 
+  - "Brian Cervantes Alvarez"
+  - "Cleighton Roberts"
+date: "5/22/2021"
+format: 
+  html:
+    fig-width: 8
+    fig-height: 4
+    code-fold: true
+---
+
+```{r}
+library(tidyverse)
+
+
+ds <- read_csv("MLB pitch_tempo.csv")
+
+head(ds, 5)
+```
+
+```{r}
+
+```
+
+
+
