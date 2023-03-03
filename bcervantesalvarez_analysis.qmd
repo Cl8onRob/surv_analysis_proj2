@@ -18,9 +18,18 @@ library(tidyverse)
 ds <- read_csv("MLB pitch_tempo.csv")
 
 head(ds, 5)
+names(ds)
 ```
 
 ```{r}
+ds %>% mutate(ratio_empty =  total_pitches_empty / total_pitches...5,
+              ratio_onbase = total_pitches_onbase / total_pitches...5,
+              empty_pitchTime =  ratio_empty * median_seconds_empty...8,
+              onbase_pitchTime = ratio_onbase * median_seconds_empty...8,) %>%
+  select(entity_id, entity_name, empty, onbase) %>%
+  mutate(status_empty = ifelse(empty_pitchTime < 15, 0, 1),
+         status_onbase = ifelse(onbase_pitchTime < 15, 0, 1)) %>%
+  select(-entity_id)
 
 ```
 
