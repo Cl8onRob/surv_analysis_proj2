@@ -1,0 +1,56 @@
+---
+title: "proj2_cl8on"
+format: html
+editor: visual
+---
+```{r}
+library(tidyverse)
+library(lubridate)
+library(skimr)
+library(survival)
+library(survminer)
+
+```
+
+```{r}
+
+ds<-read.csv('MLB pitch_tempo.csv')
+
+
+mlbds<-ds%>%
+  mutate(hmc=freq_hot-freq_cold)
+
+mlbds%>%
+  ggplot(aes(x=hmc))+
+  geom_histogram()
+```
+
+#Making Bins
+3 bins, each 1/3 of the population sorted by cold, warm, and hot and based entirely off of hot-cold
+'hmc>.091'
+'hmc<-.0456'
+'and 0.456> hmc <.091'
+
+```{r}
+mlbds<-mlbds%>%mutate(hotnot=
+                        case_when(
+                          hmc>.091 ~ 'hot',
+                          hmc<(-.0486) ~ 'cold',
+                          (hmc < .091 & hmc > (-.0486))~'warm'
+                        ))
+```
+
+
+#Survcurv
+
+```{r}
+survObj<-survfit(Surv(mlbds$median_seconds_empty,rep(1,nrow(mlbds)))~mlbds$hotnot)
+ggsurvplot(fit=survObj,data=mlbds)+
+  labs(
+    title='Pitch Duration',
+    y = 'Percent of Pitchers',
+    x='duration (seconds)'
+  )
+```
+
+
